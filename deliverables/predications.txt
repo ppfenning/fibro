@@ -1,0 +1,150 @@
+****************************************************************************************************
+PMID: 16155813
+====================================================================================================
+Actual: Pain perception and fibromyalgia
+Prediction: Pain perception and associated beliefs in fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 31480366
+====================================================================================================
+Actual: Physical Condition Factors that Predict a Better Quality of Life in Women with Fibromyalgia
+Prediction: Predictors of the quality of life in women with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 14635274
+====================================================================================================
+Actual: Sustained improvement produced by nonpharmacologic intervention in fibromyalgia results of a pilot study
+Prediction: A pilot study of a nonpharmacologic behavioral intervention for patients with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 23597325
+====================================================================================================
+Actual: Development of a multidimensional measure of fibromyalgia symptomatology the comprehensive rating scale for fibromyalgia symptomatology
+Prediction: Validation of the Comprehensive Rating Scale for Fibromyalgia Symptomatology
+====================================================================================================
+****************************************************************************************************
+PMID: 21258823
+====================================================================================================
+Actual: Mediumterm effects of a multimodal therapy on patients with fibromyalgia Results of a controlled efficacy study
+Prediction: Multimodal rehabilitation in fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 16208640
+====================================================================================================
+Actual: Maintenance of exercise in women with fibromyalgia
+Prediction: Predictors of exercise maintenance in women with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 21510344
+====================================================================================================
+Actual: Fibromyalgia diagnostic criteria
+Prediction: Fibromyalgia and the American College of Rheumatology
+====================================================================================================
+****************************************************************************************************
+PMID: 17224178
+====================================================================================================
+Actual: Growth hormone perturbations in fibromyalgia a review
+Prediction: Growth hormone and insulinlike growth factor1 in fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 19689173
+====================================================================================================
+Actual: Diagnosing and treating fibromyalgia
+Prediction: Fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 25703594
+====================================================================================================
+Actual: Fibromyalgialike symptoms associated with irritable bowel syndrome A challenging diagnosis of lateonset Pompe disease
+Prediction: Lateonset fibromyalgia syndrome and irritable bowel syndrome
+====================================================================================================
+****************************************************************************************************
+PMID: 25924021
+====================================================================================================
+Actual: The adaptation of a Danish version of the Pain SelfEfficacy Questionnaire reliability and construct validity in a population of patients with fibromyalgia in Denmark
+Prediction: Psychometric properties of the Pain SelfEfficacy Questionnaire in patients with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 31497758
+====================================================================================================
+Actual: Proinflammatory Cytokines and Oxidized LowDensityLipoprotein in Patients With Fibromyalgia
+Prediction: Serum levels of tumor necrosis factoralpha interleukin1 beta and oxidized lowdensity lipoprotein in female fibromyalgia patients
+====================================================================================================
+****************************************************************************************************
+PMID: 17266067
+====================================================================================================
+Actual: Mindfulness meditation alleviates depressive symptoms in women with fibromyalgia results of a randomized clinical trial
+Prediction: Effects of MindfulnessBased Stress Reduction on Depressive Symptoms in Patients with Fibromyalgia A Randomized Controlled Trial
+====================================================================================================
+****************************************************************************************************
+PMID: 8686716
+====================================================================================================
+Actual: Fibromyalgia syndrome overnight falls in arterial oxygen saturation
+Prediction: Sleep alterations in patients with fibromyalgia syndrome
+====================================================================================================
+****************************************************************************************************
+PMID: 17087863
+====================================================================================================
+Actual: How do we know that the pain in fibromyalgia is real
+Prediction: Fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 7473480
+====================================================================================================
+Actual: Patient utilities in fibromyalgia and the association with other outcome measures
+Prediction: Utility measures in patients with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 28681715
+====================================================================================================
+Actual: Motor cortex tRNS improves pain affective and cognitive impairment in patients with fibromyalgia preliminary results of a randomised shamcontrolled trial
+Prediction: Transcranial random noise stimulation of primary motor cortex in patients with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 27132119
+====================================================================================================
+Actual: No relevant excess prevalence of myotonic dystrophy type 2 in patients with suspected fibromyalgia syndrome
+Prediction: Prevalence of myotonic dystrophy type 2 in patients with suspected fibromyalgia syndrome
+====================================================================================================
+****************************************************************************************************
+PMID: 26696719
+====================================================================================================
+Actual: Targeting pain catastrophization in patients with fibromyalgia using virtual reality exposure therapy a proofofconcept study
+Prediction: Virtual reality exposure therapy for exerciserelated pain catastrophizing in patients with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 12126575
+====================================================================================================
+Actual: A realistic approach to managing patients with fibromyalgia
+Prediction: Fibromyalgia syndrome a biopsychosocial model
+====================================================================================================
+****************************************************************************************************
+PMID: 17961261
+====================================================================================================
+Actual: CatecholOmethyltransferase gene haplotypes in Mexican and Spanish patients with fibromyalgia
+Prediction: CatecholOmethyltransferase in women with fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 31543629
+====================================================================================================
+Actual: The Impact of a Daily Yoga Program for Women with Fibromyalgia
+Prediction: A pilot study of the effects of yoga on women with fibromyalgia symptoms
+====================================================================================================
+****************************************************************************************************
+PMID: 8480141
+====================================================================================================
+Actual: Clinical features in patients with chronic muscle painwith special reference to fibromyalgia
+Prediction: Clinical characteristics of fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 17894923
+====================================================================================================
+Actual: Melatonin therapy in fibromyalgia
+Prediction: Melatonin in the treatment of fibromyalgia
+====================================================================================================
+****************************************************************************************************
+PMID: 20398013
+====================================================================================================
+Actual: Neuroendocrine therapy of fibromyalgia syndrome an update
+Prediction: Pharmacological treatment of fibromyalgia
+====================================================================================================
