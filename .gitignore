@@ -226,5 +226,6 @@ dmypy.json
 cython_debug/
 
 deliverables/lightning_logs
-deliverables/outputs
+deliverables/outputs/simplet5-epoch-0-*
+deliverables/outputs/simplet5-epoch-1-*
 deliverables/recordings
