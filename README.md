@@ -5,7 +5,7 @@ Fibromyalgia Final Project:
 
 >**OBJECTIVE:** Use the [Fibromyalgia Abstracts](../data/fibro_abstracts.csv) dataset to generate titles from abstract content. Titles behave as a summary of sorts, so title will serve as testing outputs.
 
->**DELIVERABLES:** [Video Walkthroughs](../recoedings)
+>**DELIVERABLES:** [Video Walkthroughs](../recordings)
 
 
 ## Part I:  _Data Cleanup_
@@ -118,7 +118,7 @@ fibro.head()
     
 
 >**_Choice:_**
->>__PMID__ seems to be presorted in decending order. This inherently maps to time of entry, thus an __ffill__ >extrapolation will give us a logical approximation for the date unit.
+>>__PMID__ seems to be presorted in decending order. This inherently maps to time of entry, thus an __ffill__ extrapolation will give us a logical approximation for the date unit.
 
 
 ```python
@@ -584,16 +584,16 @@ fibro_clean.head()
 
 
 
-## Part II: _Model_
+## Part II: _Model Setup_
 ---
 
 >Now that our data is in a cleansed and in an easily queryable state, if is time to analyze the important parts of this document: Title and Abstract. Our goal here is to develop a title from the given abstract. 
 
-> **DISCLAIMER:** I have chosen to use `SimpleT5` as a pretrain solution. I followed this [tutorial](https://colab.research.google.com/drive/1JZ8v9L0w0Ai3WbibTeuvYlytn0uHMP6O?usp=sharing#scrollTo=zWE4rl2vhaLZ) to set my model up. This also requires a pytorxh install.
+> **DISCLAIMER:** I have chosen to use `SimpleT5` as a pretrain solution. I followed this [tutorial](https://colab.research.google.com/drive/1JZ8v9L0w0Ai3WbibTeuvYlytn0uHMP6O?usp=sharing#scrollTo=zWE4rl2vhaLZ) to set my model up. This also requires a pytorch install.
 
-### 1. Train Test Split
+### 1. Formatting for `SimpleT5`
 
-> We want to split our data into a train and test set using `sklearn`.
+> `SimpleT5` requires a specidied __input__ and __output__ dataframe which we format below as `df`.
 
 
 ```python
@@ -609,6 +609,7 @@ print(fibro_clean["abstract"].iloc[0])
 
 # t5 set
 df = fibro_clean[['abstract', 'title']].copy()
+# target column names
 df.columns = ['source_text', 'target_text']
 
 # T5 model expects a task related prefix: since it is a summarization task, we will add a prefix "summarize: "
@@ -684,6 +685,10 @@ df.head()
 
 
 
+### 2. Train-Test Split.
+
+> With only having one set of data, it is a good idea to split into train and test subframes. We create an 80% train vs 20% test split below using `sklearn`. This also chooses `PMID` at random so our data sets should choose articles uniformly over time.
+
 
 ```python
 # train test split
@@ -701,105 +706,195 @@ train_df.shape, test_df.shape
 
 
 
+## Part III: Model Training
+
+### 1. Initialize
+
+> In this step we will use `train_df` to train our model, as well as evaluate our progress using the first 100 rows of `test_df`. The `SimpleT5` is a pre-trained model tailored for __NLP__ tasks. Additionally, this module will create checkpoint and output structure for each epoch, only keeping the best output.  
+
 
 ```python
 from simplet5 import SimpleT5
+import os
 
 model = SimpleT5()
-model.from_pretrained(model_type="t5", model_name="t5-base")
-model.train(train_df=train_df[:5000],
-            eval_df=test_df[:100], 
-            source_max_token_len=128, 
-            target_max_token_len=50, 
-            batch_size=8, max_epochs=3, use_gpu=False)
+model_saved = 'outputs/simplet5-epoch-0-train-loss-1.5917-val-loss-1.4299/'
+
+if os.listdir(model_saved):
+    # load trained T5 model
+    model.load_model("t5",model_saved, use_gpu=False)
+else:
+    # load if no checkpoint
+    model.from_pretrained(model_type="t5", model_name="t5-base")
+    model.train(train_df=train_df[:5000],
+                eval_df=test_df[:100], 
+                source_max_token_len=128, 
+                target_max_token_len=50, 
+                batch_size=8, max_epochs=3, use_gpu=False)
 ```
 
-    GPU available: False, used: False
-    TPU available: False, using: 0 TPU cores
-    IPU available: False, using: 0 IPUs
-    Missing logger folder: /Users/ppfenning/PycharmProjects/fibro/deliverables/lightning_logs
-    
-      | Name  | Type                       | Params
-    -----------------------------------------------------
-    0 | model | T5ForConditionalGeneration | 222 M 
-    -----------------------------------------------------
-    222 M     Trainable params
-    0         Non-trainable params
-    222 M     Total params
-    891.614   Total estimated model params size (MB)
-
-
-
-    Validation sanity check: 0it [00:00, ?it/s]
-
-
-    /usr/local/Caskroom/miniconda/base/envs/fibro/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 12 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
-      rank_zero_warn(
-    Global seed set to 42
     Global seed set to 42
 
 
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+### 2 . Predict
+
+> Let's show some predictions for a random delection of the `test_df` which was not used in the evaluation (rows 101 and up) 
 
 
-    Global seed set to 42
-    /usr/local/Caskroom/miniconda/base/envs/fibro/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:132: UserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 12 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
-      rank_zero_warn(
+```python
+# choose 50 rows after the avaluation point
+sample_df = test_df[100:].sample(50)
+sample_df.head(), sample_df.shape
+sample_df.columns = ['abstract', 'title']
+```
 
 
+```python
+# print predications using model.predict
+sample_df['prediction'] = [model.predict(abstract)[0] for abstract in sample_df.abstract]
+```
 
-    Training: 0it [00:00, ?it/s]
-
-
-    Global seed set to 42
-    Global seed set to 42
-
-
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+    Token indices sequence length is longer than the specified maximum sequence length for this model (549 > 512). Running this sequence through the model will result in indexing errors
 
 
 
-    Validating: 0it [00:00, ?it/s]
+```python
+sample_df[['title', 'prediction']].head(20)
+```
 
 
-    Global seed set to 42
-    Global seed set to 42
 
 
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
-    Global seed set to 42
-    Global seed set to 42
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>prediction</th>
+    </tr>
+    <tr>
+      <th>PMID</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>21497140</th>
+      <td>Transcranial DC stimulation in fibromyalgia optimized cortical target supported by highresolution computational models</td>
+      <td>Effects of transcranial direct current stimulation in fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>28779930</th>
+      <td>Effects of whole body vibration therapy in pain function and depression of the patients with fibromyalgia</td>
+      <td>Effects of whole body vibration in fibromyalgia patients</td>
+    </tr>
+    <tr>
+      <th>16572917</th>
+      <td>Eosinophilic perifolliculitis presenting as a painful cystic ovarian mass in a woman with fibromyalgia a case report</td>
+      <td>Eosinophilic perifolliculitis in women with premenopausal and perimenopausal ovarian failure</td>
+    </tr>
+    <tr>
+      <th>20855168</th>
+      <td>Internetenhanced management of fibromyalgia a randomized controlled trial</td>
+      <td>Internetbased exercise and behavioral selfmanagement for fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>10953277</th>
+      <td>Fibromyalgia following trauma psychology or biology</td>
+      <td>The role of biology and psychology in the development of fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>30682223</th>
+      <td>Evidence for an association between endometriosis fibromyalgia and autoimmune diseases</td>
+      <td>Prevalence of endometriosis and fibromyalgia in women with autoimmune disease</td>
+    </tr>
+    <tr>
+      <th>19327791</th>
+      <td>Cognitive profile in fibromyalgia Comparison with a mild cognitive impairment group</td>
+      <td>Neuropsychological assessment of patients with fibromyalgia and with subjective cognitive complaints</td>
+    </tr>
+    <tr>
+      <th>12237183</th>
+      <td>Enhanced temporal summation of second pain and its central modulation in fibromyalgia patients</td>
+      <td>Temporal summation windup and decay of second pain in fibromyalgia patients</td>
+    </tr>
+    <tr>
+      <th>31964420</th>
+      <td>Treatment data from the Brazilian fibromyalgia registry EpiFibro</td>
+      <td>A crosssectional study of the treatment of patients with fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>26825913</th>
+      <td>Dry Eye Syndrome Risks in Patients With Fibromyalgia A National Retrospective Cohort Study</td>
+      <td>Fibromyalgia and dry eye syndrome</td>
+    </tr>
+    <tr>
+      <th>26778226</th>
+      <td>Shortterm complementary and alternative medicine on quality of life in women with fibromyalgia</td>
+      <td>A comparative study of acupuncture electroacupuncture and moxibustion in women with fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>15180033</th>
+      <td>Mitochondrial encephalomyopathy with lactic acidosis and strokelike episodes MELAS a mitochondrial disorder presents as fibromyalgia</td>
+      <td>Fibromyalgia and mitochondrial disorders</td>
+    </tr>
+    <tr>
+      <th>18222129</th>
+      <td>Emotions and emotional approach and avoidance strategies in fibromyalgia</td>
+      <td>Emotionalavoidance and emotionalavoidance strategies in women with fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>2735155</th>
+      <td>Personality markers defense behavior and illness concept in patients with primary fibromyalgia</td>
+      <td>Fibromyalgia and the role of personality traits in disease behavior</td>
+    </tr>
+    <tr>
+      <th>26843364</th>
+      <td>Associations between patterns of active commuting and socioeconomic factors in women with fibromyalgia the alAndalus project</td>
+      <td>Active commuting behaviour in women with fibromyalgia and controls</td>
+    </tr>
+    <tr>
+      <th>3801074</th>
+      <td>The natural history of fibromyalgia</td>
+      <td>Natural history of fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>11037075</th>
+      <td>Treating fibromyalgia</td>
+      <td>Fibromyalgia and the neuroendocrine system</td>
+    </tr>
+    <tr>
+      <th>15283010</th>
+      <td>Decreased sleep spindles and spindle activity in midlife women with fibromyalgia and pain</td>
+      <td>Spindle frequency activity in midlife women with fibromyalgia and moderate to high pain</td>
+    </tr>
+    <tr>
+      <th>12122925</th>
+      <td>Management of dysautonomia in fibromyalgia</td>
+      <td>Dysautonomia in the pathogenesis of fibromyalgia</td>
+    </tr>
+    <tr>
+      <th>31131959</th>
+      <td>A diagnosis of rheumatoid arthritis endometriosis or IBD is associated with later onset of fibromyalgia and chronic widespread pain</td>
+      <td>A longitudinal study of fibromyalgia and chronic widespread pain in patients with rheumatoid arthritis endometriosis or inflammatory bowel disease</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-    huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-    To disable this warning, you can either:
-    	- Avoid using `tokenizers` before the fork if possible
-    	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
 
